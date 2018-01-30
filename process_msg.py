@@ -1,24 +1,20 @@
 import subprocess
 from naive_LM import Naive_LM
 import pandas as pd
+import numpy as np
 
 
 def process(msg):
 
     answer = starspace(msg)
-
-
-    return 'Returned message ====> ' + answer
+    
+    return answer
     
     
 def naive(text):
     model = Naive_LM()
     
     list_of_a = model.get_closest_answers(text)
-    
-    print('######################')
-    print(list_of_a)
-    print('######################')
     
     return list_of_a[0]
     
@@ -39,10 +35,13 @@ def starspace(text):
         f.write(text)
 
     bashCommand = '~/Starspace/embed_doc questions_1000_embeddings testtext.txt'
-    output = subprocess.check_output(['bash','-c', bashCommand])
+    output = subprocess.check_output(['bash','-c', bashCommand]).decode()
 
-    print(output)
-
+    vec_str = output.split('\n')[-2]
+    vec = np.fromstring(vec_str, dtype=float, sep=' ')
+    print(vec)
+    
     dictionary = pd.read_csv('messageId_threadId.txt')
-
-    return output.decode()
+    
+    str = 'temp'
+    return str
