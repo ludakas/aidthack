@@ -1,10 +1,11 @@
 import subprocess
 from naive_LM import Naive_LM
+import pandas as pd
 
 
 def process(msg):
 
-    answer = naive(msg)
+    answer = starspace(msg)
 
 
     return 'Returned message ====> ' + answer
@@ -30,4 +31,18 @@ def fasttext_test(text):
     bashCommand = '~/fastText/fasttext predict-prob model_sup_tr.bin testtext.txt 1'
     output = subprocess.check_output(['bash','-c', bashCommand])
     
+    return output.decode()
+
+def starspace(text):
+
+    with open('testtext.txt', 'w') as f:
+        f.write(text)
+
+    bashCommand = '~/Starspace/embed_doc questions_1000_embeddings testtext.txt'
+    output = subprocess.check_output(['bash','-c', bashCommand])
+
+    print(output)
+
+    dictionary = pd.read_csv('messageId_threadId.txt')
+
     return output.decode()
